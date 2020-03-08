@@ -1,0 +1,216 @@
+
+
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+
+
+    <script>
+
+
+
+
+        $(function() {
+            $("#ville option[value=" + 'Maroc' + "]").prop("selected",true);
+            $("#age").hide();
+            //fonction pour eviter la repition
+            $(function PV(IDPays){
+                $.ajax({
+                    url:'{{ (path('GEtville')) }}',
+                    type: "get",
+                    dataType: "json",
+                    data: {
+                        pays_id:IDPays
+                    },
+                    async: true,
+                    success: function (data)
+                    {
+                        // console.log("ssssssssssssss");
+                        console.log(data);
+                        $('.ville') .empty()
+                        $.each(data, function(index, data) {
+                            //  $.each(data, function(index, array) {
+                            //    $('.ville') .empty()
+                            $('.ville').append('<option value="' + data.id + '">' + data.libelle + '</option>');
+                        })
+                    }
+                });
+
+            })
+
+            /////Ajouter Villes
+
+            $('#insert').click(function(){
+
+                var code= $('#code').val();
+                var IdPays=$('#idpays').val();
+
+                var Libelle =$('#lib').val();
+                var codePostale=$('#postale').val();
+
+                var DATA = {'IdPays':IdPays,'code':code,'Libelle':Libelle,'codepostale':codePostale};
+                    //console.log(DATA);
+
+                $.ajax({
+                    dataType: 'JSON',
+                    type: 'GET',
+                    url:'{{ (path('Add_ville_list')) }}',
+                    data: DATA,
+                      //  {
+
+                       // },
+
+                    success: function(data) {
+                        if(data.result == 'error'){
+                     //       console.log('probleme ws');
+                         //   $( "#ville option:selected" ).Libelle.text();
+                            $('#ville option[value=Libelle]').prop('selected', true);
+                        }
+                $('#samira').hide();
+                       //     window.load();
+
+
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+
+                //Verification si la villes et deja disponible
+     /*           $.ajax({
+                    url:'{{ (path('GEtville')) }}',
+                    type: "get",
+                    dataType: "json",
+                    data: {
+                        pays_id:pays
+                    },
+                    async: true,
+                    success: function (data)
+                    {
+                        // console.log("ssssssssssssss");
+                        console.log(data);
+                        $('.ville').empty()
+                        $.each(data, function(index,data) {
+                            if  (data.libelle=Libelle){
+
+                            console.log('la ville exist deja ')
+                         //  $('#samira').onclick = "$('.close').trigger('click')";
+                                }
+                        })
+                            //  $.each(data, function(index, array) {
+                            //    $('.ville') .empty()
+                         //   else if (data.libelle =! Libelle) {
+                      //      $('.ville').append('<option value="' + data.id + '">' + data.libelle + '</option>');
+                        //    }
+                      //  })
+                    }
+                });
+*/
+            });
+
+
+
+            $('.ville') .empty()
+
+            $('#samira').on('shown.bs.modal', function () {
+                $('#idpays').val(pays);
+                $(".form-control").append(pays);
+                //       $('#myInput').trigger('focus')
+            });
+
+            $('#samira').on('hidden.bs.modal', function (e) {
+                // do something...
+                $("#msgHidden").append("Saluuuut samira ");
+                $(".form-control").html('');
+            });
+
+
+            $(".pays").change(function(){
+                $("#age").show();
+                pays = $(this).val();
+                console.log($(this).val());
+               //  PV(pays);
+                $.ajax({
+                    url:'{{ (path('GEtville')) }}',
+                    type: "get",
+                    dataType: "json",
+                    data: {
+                        pays_id:pays
+                    },
+                    async: true,
+                    success: function (data)
+                    {
+                        // console.log("ssssssssssssss");
+                        console.log(data);
+                        $('.ville') .empty()
+                        $.each(data, function(index, data) {
+                            //  $.each(data, function(index, array) {
+                            //    $('.ville') .empty()
+                            $('.ville').append('<option value="' + data.id + '">' + data.libelle + '</option>');
+                        })
+                    }
+                });
+
+
+
+
+            })
+        })
+
+
+    </script>
+
+
+
+
+    <h3>Formulaire d'ajout de client</h3>
+    {{form (form)}}
+
+    <div class="table-responsive">
+
+        <button type="button" name="age" id="age" data-toggle="modal" data-target="#samira" class="btn btn-warning">Add</button>
+    </div>
+    <br />
+
+    <!-- Button trigger modal -->
+    <div id="samira" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Ajouter votre ville</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="insert_form">
+                        <label>Id Pays</label>
+                        <input type="text" name="idpays" id="idpays" class="form-control" />
+                        <br />
+                        <label>Enter le code de votre ville </label>
+                        <input type="text" name="code" id="code" class="form-control" />
+                        <br />
+
+                        <br />
+                        <label>Libelle</label>
+                        <input type="text" name="libelle" id="lib" class="form-control" />
+                        <br />
+                        <label>Code posale</label>
+                        <input type="text" name="postale" id="postale" class="form-control" />
+                        <br />
+                        <input type="button" name="Insert" id="insert"  value="Insert" class="btn btn-success" />
+
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-target="fermer" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
