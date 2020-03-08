@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends Controller
 {
    /**
-    * @Route("addProduit/{nom}/{prix}")
+    * @Route("/addProduit/{nom}/{prix}")
     *@Template()
     */
 
@@ -23,6 +23,16 @@ class DefaultController extends Controller
         $em->persist($produit);
 
         $em->flush();
-       return  array('a'=>$a,'b'=>$b,'somme'=>$s);
+       return  array('produit'=>$p);
+    }
+
+     /**
+    * @Route("/ListProduit")
+    *@Template()
+    */
+
+    public function addProduitsAction(){
+        
+       return  array('produit'=>$p);
     }
 }
