@@ -17,7 +17,12 @@ class DefaultController extends Controller
         $produit=new Produit();
         $produit->setNom($nom);
         $produit->setPrix($prix);
-        
+        //entity manager permet d'accéder a toute les opérations classiques d'accès au BD (exple JPA)
+        $em=$this->getDoctrine()->getManager();
+        //pour enregistrer un objet
+        $em->persist($produit);
+
+        $em->flush();
        return  array('a'=>$a,'b'=>$b,'somme'=>$s);
     }
 }
